@@ -28,7 +28,7 @@ else {
 // echo "<pre>";
 // print_r($this->user);
 // echo "</pre>";
-
+echo "vuong";
 
  ob_end_flush();
 ?>
