@@ -16,48 +16,30 @@ class UsersController {
 	public function test_input($data) {
 		  $data = trim($data);
 		  $data = stripslashes($data);
+		  $data =  preg_replace('/\s+/',' ', $data);
 		  $data = htmlspecialchars($data);
 		  return $data;
 		}
 
 	public function checkLogin(){
-		if(isset($_COOKIE['user_token'])){
-			$token = $_COOKIE['user_token'];
-			$rs = $this->route->checkToken($token);
-			if(!empty($rs)){
-				$user = new UsersModel();
-				$user->setId($rs['id']);
-				$user->setUsername($rs['username']);
-				$user->setPassword($rs['password']);
-				$user->setRemember_token($rs['remember_token']);
-				$_SESSION['user_token'] = $user;
-	
-				header('Location:?ctl=Post&action=getPost');
-			}
-			else{
-				$this->view->loginView($data="");
-			}
-			
-		}
 
-		else if(isset($_SESSION['user_token'])){
-				header('Location:?ctl=Post&action=getPost');
-			}
+		
+		if(isset($_SESSION['user_token'])&&!empty($_SESSION['user_token'])||isset($_COOKIE['user_token'])&&!empty($this->route->checkToken($_COOKIE['user_token'])))
+			header('Location:?ctl=Post&action=getPost');
 
 			else{
 			 $this->view->loginView($data="");
 			 unset($_SESSION['err_login']);
-			}
+			 }
 	
-
-
 		}
 		
 	
 
 	public function login(){
-		// unset($_SESSION['err_login']);die();
-		if(!empty($_COOKIE['user_token'])||!empty($_SESSION['user_token'])) header("Location:?ctl=Post&action=getPost");
+		
+		if(isset($_SESSION['user_token'])&&!empty($_SESSION['user_token'])||isset($_COOKIE['user_token'])&&!empty($this->route->checkToken($_COOKIE['user_token'])))
+			header("Location:?ctl=Post&action=getPost");
 		
 		$username= $password =$remember_pass = "";
 		$username_er=$password_er="";
@@ -81,7 +63,7 @@ class UsersController {
 		if($num==1) {  
 			$user->setId($rs['id']);
 			
-			$user->setRemember_token($rs['remember_token']);
+			$user->setRemember_token(!empty($rs['remember_token'])?$rs['remember_token']:"");
 			$_SESSION['user_token'] = $user;
 			
 			if($remember_pass=='on'){

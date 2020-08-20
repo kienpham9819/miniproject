@@ -7,3 +7,8 @@
 	color:red;
 	margin-left:10px;
 }
+
+.btn1{
+	display: flex;
+	justify-content: space-between;
+}

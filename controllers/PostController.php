@@ -21,6 +21,7 @@
 		public function test_input($data) {
 		  $data = trim($data);
 		  $data = stripslashes($data);
+		  $data =  preg_replace('/\s+/',' ', $data);
 		  $data = htmlspecialchars($data);
 		  return $data;
 		}
@@ -30,7 +31,7 @@
 		{
 			
 			$data = $this->route->getPost();
-			
+
 			$this->view->showPost($data);
 			
 		}
@@ -44,6 +45,8 @@
 
 		}
 
+		
+
 		public function saveEdit(){
 			
 			$title = $content =$url_img = $tag="";
@@ -51,7 +54,7 @@
 		
 			
 			 if(isset($_POST['btn_edit_post'])){
-			 
+			 	
 				$title = $this->test_input($_POST['title']);
 				$content = $this->test_input($_POST['content']);
 
@@ -59,19 +62,49 @@
 				$tag = $this->test_input($_POST['tag']);
 				$id = $this->test_input($_POST['id_post']);
 
-				if(empty($title)||empty($content)||empty($tag)){
-				$post =new PostModel();
-				$post->setId($id);
-				$post->setTitle($title);
-				$post->setContent($content);
-				$post->setUrl_thumbnail($_POST['reverse_url']);
-				$post->setTag($tag);
-				$_SESSION['err_edit'] = "Không được bỏ trống các trường *";
-				$this->view->showFormEdit($post);
-				 unset($_SESSION['err_edit']);
-			}
+				$array_err = array();
+				
 
-			else{
+				if(empty($title)){
+				$array_err['title_err'] = "Không được bỏ trống ";
+			 	}
+
+			 	if(empty($content)){
+				$array_err['content_err'] = "Không được bỏ trống ";
+			 	}
+
+			 	if(empty($tag)){
+				$array_err['tag_err'] = "Không được bỏ trống ";
+			 	}
+				
+				if(strlen($title)>50){
+						$array_err['title_err'] = 'Không được vượt quá 50 kí tự';
+					}
+
+				if(strlen($content)>500){
+						$array_err['content_err'] = 'Không được vượt quá 500 kí tự';
+					}
+				if(strlen($tag)>50){
+						$array_err['tag_err'] = 'Không được vượt quá 50 kí tự';
+					}
+
+			 	if($this->route->search_data_edit($title,$id)!==false){
+					$array_err['title_err'] = "Title đã tồn tại ";
+				}
+
+				if(!empty($array_err)){
+					$post =new PostModel();
+					$post->setId($id);
+					$post->setTitle($title);
+					$post->setContent($content);
+					$post->setUrl_thumbnail($_POST['reverse_url']);
+					$post->setTag($tag);
+					$_SESSION['err_edit'] = $array_err;
+					$this->view->showFormEdit($post);
+					 unset($_SESSION['err_edit']);
+				}
+
+				else{
 				
 				$post =new PostModel();
 				$post->setId($id);
@@ -90,11 +123,6 @@
 			}
 
 		
-
-			
-			
-
-
 			
 		}
 
@@ -114,19 +142,58 @@
 				$url_img = !empty($_FILES["url_img"]["name"])?"images/".time().$_FILES["url_img"]["name"]:"";
 				$tag = $this->test_input($_POST['tag']);
 				$id_user= unserialize(serialize($_SESSION['user_token']))->getId();
+				$array_err = array();
 				
 
-				if(empty($title)||empty($content)||empty($url_img)||empty($tag)||empty($url_img)){
+				if(empty($title)){
+					
+					$array_err['title_err'] = "Không được bỏ trống";
+					
+				}
+				if(empty($content)){
+					
+					$array_err['content_err'] = "Không được bỏ trống";
+					
+				}
+				if(empty($url_img)){
+					
+					$array_err['url_img_err'] = "Vui lòng chọn ảnh đại diện";
+					
+				}
+				if(empty($tag)){
+					
+					$array_err['tag_err'] = "Không được bỏ trống";
+					
+				}
+
+
+				if(strlen($title)>50){
+						$array_err['title_err'] = 'Không được vượt quá 50 kí tự';
+					}
+				if(strlen($content)>500){
+						$array_err['content_err'] = 'Không được vượt quá 500 kí tự';
+					}
+				if(strlen($tag)>50){
+						$array_err['tag_err'] = 'Không được vượt quá 50 kí tự';
+					}
+
+				
+				if($this->route->search_data($title)!==false){
+					$array_err['title_err'] = "Title đã tồn tại ";
+				}
+
+				if(!empty($array_err)){
 					$post =new PostModel();
 					$post->setTitle($title);
 					$post->setContent($content);
 					$post->setUrl_thumbnail($url_img);
 					$post->setTag($tag);
-					$_SESSION['err_add'] = "Không được bỏ trống các trường *";
-					  
+					$_SESSION['err_add'] = $array_err;
 					$this->view->addPostView($post);
 					unset($_SESSION['err_add']);
 				}
+					
+				
 				else{
 
 					 $post =new PostModel();
