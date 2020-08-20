@@ -74,8 +74,7 @@ if(isset($_GET['action'])&&!empty($_GET['action'])){
 // echo "<pre>";
 // print_r($this->user);
 // echo "</pre>";
-echo "vuong";
-echo "kien";
+
 
  ob_end_flush();
 
