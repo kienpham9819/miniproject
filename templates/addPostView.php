@@ -13,7 +13,9 @@
 </head>
 <body>
 	<?php 
-	//echo $_SESSION['demo'];
+// 	echo "<pre>";
+// print_r($_SESSION['err_add']);
+// echo "</pre>";
 	 ?>
 	
 	<div class="container">
@@ -23,34 +25,34 @@
 		<legend>Form Add</legend>
 		
 		<div class="form-group">
-			<label for="">Title</label><span class="err">*</span>
-			<input type="text" class="form-control" id="" value="<?php if(!empty($data)) echo $data->getTitle() ; ?> " name="title" placeholder="Type title">
+			<label for="">Title</label><span class="err">* <?php if(isset($_SESSION['err_add']['title_err'])) echo $_SESSION['err_add']['title_err'] ; ?></span>
+			<input type="text" class="form-control" id=""  value="<?php if(!empty($data)) echo $data->getTitle() ; ?> "  maxlength='50' required  name="title" placeholder="Type title">
 		</div>
 
 		<div class="form-group">
-			<label for="">Content</label><span class="err">*</span>
-			<textarea name="content" id=""   class="form-control" cols="20" rows="5" placeholder="Type content"><?php if(!empty($data)) echo $data->getContent() ;?></textarea>
+			<label for="">Content</label><span class="err">* <?php if(isset($_SESSION['err_add']['content_err'])) echo $_SESSION['err_add']['content_err'] ; ?></span>
+			<textarea name="content" id=""   maxlength='500' required  class="form-control" cols="20" rows="5" placeholder="Type content"><?php if(!empty($data)) echo $data->getContent() ;?></textarea>
 		</div>
 
 		<div class="form-group">
-			<label for="url_img"><span>Image</span><span class="err">*</span><br><img src="images/icon/choose_img.png" width="60" id="lab_url" alt=""></label>
+			<label for="url_img"><span>Image</span><span class="err">*<?php if(isset($_SESSION['err_add']['url_img_err'])) echo $_SESSION['err_add']['url_img_err'] ; ?> </span><br><img src="images/icon/choose_img.png" width="60" id="lab_url" alt=""></label>
 			<input type="file" class="form-control" style="display: none;"  id="url_img" name="url_img"  >
 			<img src="#" id="img_add" alt="" width="100">
 			
 		</div>
 
 		<div class="form-group">
-			<label for="">Tag</label><span class="err">*</span>
-			<input type="text" class="form-control" value="<?php if(!empty($data)) echo $data->getTag() ;?>" id="" name="tag" placeholder="Type tag">
+			<label for="">Tag</label><span class="err">* <?php if(isset($_SESSION['err_add']['tag_err'])) echo $_SESSION['err_add']['tag_err'] ; ?></span>
+			<input type="text" class="form-control" required value="<?php if(!empty($data)) echo $data->getTag() ;?>" id="" name="tag" maxlength='50' placeholder="Type tag">
 
 		</div>
 	
 		
 		<a href="?ctl=Post&action=addPost" type="button" class="btn btn-danger">Reset</a>
 		<button type="submit" name="btn_add_post" class="btn btn-primary">Save</button>
-		 <span name="add_post_err" class="err"><?php if(isset($_SESSION['err_add'])) echo $_SESSION['err_add'] ; ?></span>
+		<a href="?ctl=Post&action=getPost" type="button" class="btn btn-info">List</a>
 	</form>
-	<a href="?ctl=Post&action=getPost" type="button" class="btn btn-info">Return</a>
+	
 			</div>
 		</div>
 	</div>

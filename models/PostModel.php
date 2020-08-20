@@ -90,7 +90,14 @@
 
 
 		public function getPost(){
-			$sql = "SELECT * FROM post";
+// 			 if(isset($_SESSION['user_token'])){
+// 			 				 	echo "<pre>";
+// print_r(unserialize(serialize($_SESSION['user_token'])));
+// echo "</pre>";die();
+// 			 }
+
+				$id_user = unserialize(serialize($_SESSION['user_token']))->getId();
+			$sql = "SELECT * FROM post WHERE id_user = $id_user ORDER BY id DESC";
 			$q = mysqli_query($this->conn,$sql);
 			$data = array();
 
@@ -179,6 +186,26 @@
 				$sql  = "DELETE FROM post WHERE id = $id";
 
 				return mysqli_query($this->conn,$sql);
+			}
+
+			public function search_data($data){
+				$sql = "SELECT * FROM post WHERE title='$data'";
+				$rs = mysqli_query($this->conn,$sql);
+				if(mysqli_num_rows($rs)>=1) return true;
+				return false;
+			}
+
+			public function search_data_edit($data,$id){
+				$sql = "SELECT title FROM post WHERE id= $id";
+				$q = mysqli_query($this->conn,$sql);
+				$rs = mysqli_fetch_assoc($q);
+				$t_o = $rs['title'];
+				if($data==$t_o) return false;
+				else{
+					return $this->search_data($data);
+				}
+				
+				
 			}
 
 

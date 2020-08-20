@@ -54,10 +54,15 @@ class UsersModel extends Config{
 			}
 
 	public function updateToken($user){
-		$token = $user->getPassword();
+
+// echo "<pre>";
+// print_r($user);
+// echo "</pre>";
 		$username= $user->getUsername();
+		$password = $user->getPassword();
+		$token = md5($username).$password;
 		setcookie('user_token',$token,time()+3600,'/');
-		$sql = "UPDATE users SET remember_token = '$token' WHERE username = '$username' AND password = '$token' ";
+		$sql = "UPDATE users SET remember_token = '$token' WHERE username = '$username' AND password = '$password' ";
 		return mysqli_query($this->conn,$sql);
 	}
 
