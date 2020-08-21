@@ -76,6 +76,7 @@ if(isset($_GET['action'])&&!empty($_GET['action'])){
 // echo "</pre>";
 
 
+
  ob_end_flush();
 
 

@@ -18,25 +18,47 @@
 	// echo "<pre>";
 	// print_r();
 	// echo "</pre>";
-			if(isset($_SESSION['noti_edit_post'])&&$_SESSION['noti_edit_post']==1){
+			if(isset($_SESSION['noti_edit_post'])){
+				if($_SESSION['noti_edit_post']==1){
 		?>
 			<div class="alert alert-success view_noti">
 			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 			<strong>Bạn đã edit thành công</strong> 
-		</div>
+			</div>
 		<?php
-			unset($_SESSION['noti_edit_post']);
 			}
 
-			if(isset($_SESSION['noti_add_post'])&&$_SESSION['noti_add_post']==1){
+			if($_SESSION['noti_edit_post']==2){
+		?>
+			<div class="alert alert-danger view_noti">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<strong>Failed to upload file, check permission of images folder</strong> 
+			</div>
+
+		<?php		
+			}
+			unset($_SESSION['noti_edit_post']);
+		}
+
+			if(isset($_SESSION['noti_add_post'])){
+				if($_SESSION['noti_add_post']==1){
 		?>
 			<div class="alert alert-success view_noti">
 			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 			<strong>Bạn đã add thành công</strong> 
-		</div>
+			</div>
 		<?php
-			unset($_SESSION['noti_add_post']);
 			}
+			if($_SESSION['noti_add_post']==2){
+		?>
+			<div class="alert alert-danger view_noti">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<strong>Failed to upload file, check permission of images folder</strong> 
+			</div>
+		<?php		
+			}
+			unset($_SESSION['noti_add_post']);
+		}
 			if(isset($_SESSION['noti_delete_post'])&&$_SESSION['noti_delete_post']==1){
 		?>
 			<div class="alert alert-success view_noti">

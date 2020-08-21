@@ -146,7 +146,8 @@
 			if (move_uploaded_file($_FILES["img_edit"]["tmp_name"], $url_img)) {
 				    $sql = "UPDATE post SET title ='$title', content= '$content',url_thumbnail='$url_img',tag ='$tag' WHERE id =$id";
 			return mysqli_query($this->conn,$sql);
-			  } }
+			  } else return false;
+			   }
 			  else {
 			  	$sql = "UPDATE post SET title ='$title', content= '$content',tag ='$tag' WHERE id =$id";
 			return mysqli_query($this->conn,$sql);
@@ -175,7 +176,7 @@
 				    $sql = "INSERT INTO post (title,content,url_thumbnail,tag,id_user) 
 				VALUES('$title','$content','$url_img','$tag',$id_user)";
 				return mysqli_query($this->conn,$sql);
-			  } 
+			  }else return false; 
 
 			
 				

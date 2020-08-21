@@ -116,9 +116,11 @@
 				$status = $this->route->saveEditPost($post);
 				if($status!==false){
 					$_SESSION['noti_edit_post'] =1;
-					header('Location:index.php?ctl=Post&action=getPost');
 				}
-
+				else {
+					$_SESSION['noti_edit_post'] =2;
+				}
+				header('Location:index.php?ctl=Post&action=getPost');
 			}
 			}
 
@@ -135,7 +137,7 @@
 		public function saveNewPost(){
 
 			$title = $content =$url_img = $tag=$id_user="";
-
+			
 			if(isset($_POST['btn_add_post'])){
 				$title = $this->test_input($_POST['title']);
 				$content = $this->test_input($_POST['content']);
@@ -203,9 +205,16 @@
 					 $post->setTag($tag);
 					 $post->setId_user($id_user);
 					
-					$this->route->saveNewPost($post);
-					$_SESSION['noti_add_post'] =1;
+					$status = $this->route->saveNewPost($post);
+					if($status!==false){
+						$_SESSION['noti_add_post'] =1;
+					}
+					else {
+						$_SESSION['noti_add_post'] =2;
+					}
+
 					header("Location:index.php?ctl=Post&action=getPost");
+					
 
 				}
 			 
